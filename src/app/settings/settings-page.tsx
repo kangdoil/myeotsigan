@@ -12,7 +12,6 @@ import { track } from '@/lib/analytics';
 export function SettingsPage() {
   const router = useRouter();
   const [currentSalary, setCurrentSalary] = useState<number | null>(null);
-  const [currentWage, setCurrentWage] = useState<number | null>(null);
   const [value, setValue] = useState('');
 
   useEffect(() => {
@@ -22,9 +21,7 @@ export function SettingsPage() {
       return;
     }
     const salary = getStorage<number>(STORAGE_KEYS.SALARY);
-    const wage = getStorage<number>(STORAGE_KEYS.HOURLY_WAGE);
     setCurrentSalary(salary);
-    setCurrentWage(wage);
     if (salary) setValue(String(salary));
   }, [router]);
 
@@ -46,7 +43,6 @@ export function SettingsPage() {
     setStorage(STORAGE_KEYS.SALARY, numericValue);
     setStorage(STORAGE_KEYS.HOURLY_WAGE, newWage);
     setCurrentSalary(numericValue);
-    setCurrentWage(newWage);
 
     track('settings_salary_updated', {
       salary_manwon: numericValue,
@@ -75,21 +71,6 @@ export function SettingsPage() {
             ← 뒤로
           </button>
           <h1 className="text-lg font-bold">설정</h1>
-        </div>
-
-        {/* 현재 시급 카드 */}
-        <div className="rounded-2xl border bg-card px-6 py-5 flex flex-col gap-1">
-          <p className="text-xs font-medium text-muted-foreground uppercase tracking-wide">
-            현재 시급
-          </p>
-          <p className="text-3xl font-bold">
-            {currentWage ? formatWon(currentWage) : '—'}
-          </p>
-          {currentSalary && (
-            <p className="text-xs text-muted-foreground mt-1">
-              연봉 {currentSalary.toLocaleString('ko-KR')}만 원 기준
-            </p>
-          )}
         </div>
 
         {/* 연봉 수정 폼 */}
