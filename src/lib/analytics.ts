@@ -6,7 +6,13 @@ const MIXPANEL_TOKEN = process.env.NEXT_PUBLIC_MIXPANEL_TOKEN ?? '';
 let initialized = false;
 
 export function initAnalytics() {
-  if (initialized || !MIXPANEL_TOKEN) return;
+  if (initialized) return;
+  if (!MIXPANEL_TOKEN) {
+    if (process.env.NODE_ENV === 'development') {
+      console.warn('[Analytics] NEXT_PUBLIC_MIXPANEL_TOKEN이 설정되지 않았습니다. Mixpanel 추적이 비활성화됩니다.');
+    }
+    return;
+  }
   mixpanel.init(MIXPANEL_TOKEN, {
     debug: process.env.NODE_ENV === 'development',
     track_pageview: true,

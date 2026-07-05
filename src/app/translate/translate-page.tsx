@@ -90,6 +90,8 @@ export function TranslatePage() {
   }
 
   const priceNum = Number(price);
+  // 입력값이 있지만 0이하인 경우 에러로 처리
+  const isPriceError = price !== '' && priceNum <= 0;
   const hasResult = workMinutes !== null && priceNum > 0;
 
   return (
@@ -144,6 +146,13 @@ export function TranslatePage() {
                 원
               </span>
             </div>
+            {/* 에러: 0 또는 음수 입력 */}
+            {isPriceError && (
+              <p className="text-xs text-destructive" role="alert">
+                0원보다 큰 금액을 입력해주세요
+              </p>
+            )}
+            {/* 포맷 미리보기 */}
             {price !== '' && priceNum > 0 && (
               <p className="text-xs text-muted-foreground">
                 {priceNum.toLocaleString('ko-KR')}원
@@ -154,6 +163,8 @@ export function TranslatePage() {
 
         {/* 환산 결과 */}
         <div
+          aria-live="polite"
+          aria-label="노동 시간 환산 결과"
           className={`rounded-2xl border px-6 py-6 flex flex-col items-center gap-2 transition-all duration-300 ${
             hasResult ? 'bg-card opacity-100' : 'bg-muted/40 opacity-60'
           }`}
@@ -163,7 +174,7 @@ export function TranslatePage() {
               <p className="text-xs font-medium text-muted-foreground uppercase tracking-wide">
                 노동 시간 환산
               </p>
-              <p className="text-4xl font-bold tracking-tight text-center">
+              <p className="text-3xl sm:text-4xl font-bold tracking-tight text-center break-keep">
                 {formatWorkTime(workMinutes!)}
               </p>
               <p className="text-sm text-muted-foreground text-center">
@@ -175,9 +186,13 @@ export function TranslatePage() {
               </p>
             </>
           ) : (
-            <p className="text-sm text-muted-foreground py-2">
-              가격을 입력하면 환산 결과가 나와요
-            </p>
+            <div className="flex flex-col items-center gap-1 py-2">
+              <p className="text-sm text-muted-foreground">
+                {isPriceError
+                  ? '올바른 가격을 입력해주세요'
+                  : '가격을 입력하면 몇 시간을 일해야 하는지 보여드려요'}
+              </p>
+            </div>
           )}
         </div>
 
@@ -188,6 +203,7 @@ export function TranslatePage() {
               onClick={handleBuy}
               disabled={!hasResult}
               className="flex-1 h-12 text-base font-semibold"
+              aria-label={productName ? `${productName} 구매하기` : '구매 결정하기'}
             >
               살래요
             </Button>
@@ -196,6 +212,7 @@ export function TranslatePage() {
               disabled={!hasResult}
               variant="outline"
               className="flex-1 h-12 text-base font-semibold"
+              aria-label={productName ? `${productName} 구매 포기하기` : '구매 포기하기'}
             >
               안 살래요
             </Button>
@@ -204,6 +221,7 @@ export function TranslatePage() {
             variant="ghost"
             onClick={handleReset}
             className="w-full h-10 text-sm text-muted-foreground"
+            aria-label="입력 초기화 후 다시 번역하기"
           >
             다시 번역하기
           </Button>

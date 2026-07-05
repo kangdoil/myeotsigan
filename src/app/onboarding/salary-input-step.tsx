@@ -63,12 +63,12 @@ export function SalaryInputStep({ onSubmit }: SalaryInputStepProps) {
 
             <div className="min-h-[20px]">
               {value !== '' && !isValid && (
-                <p className="text-xs text-destructive">
+                <p className="text-xs text-destructive" role="alert" aria-live="polite">
                   올바른 연봉을 입력해주세요 (1 ~ 100,000만 원)
                 </p>
               )}
               {isValid && (
-                <p className="text-xs text-muted-foreground">
+                <p className="text-xs text-muted-foreground" aria-live="polite">
                   {numericValue.toLocaleString('ko-KR')}만 원
                 </p>
               )}

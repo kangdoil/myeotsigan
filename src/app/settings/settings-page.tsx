@@ -98,7 +98,7 @@ export function SettingsPage() {
             {/* 미리보기 */}
             <div className="min-h-[20px]">
               {value !== '' && !isValid && (
-                <p className="text-xs text-destructive">
+                <p className="text-xs text-destructive" role="alert" aria-live="polite">
                   올바른 연봉을 입력해주세요 (1 ~ 100,000만 원)
                 </p>
               )}
